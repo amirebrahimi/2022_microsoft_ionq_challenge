@@ -24,7 +24,7 @@ OR
 * Amir Ebrahimi / [@amirebrahimi](https://github.com/amirebrahimi)
 * Jamie Gill / [@hegotgame](https://github.com/hegotgame)
 * Mostafa Atallah / [@Mostafa-Atallah2020](https://github.com/Mostafa-Atallah2020)
-* Syed Farhan / [@born-2learn](https://github.com/born-2learn)
+* Syed Farhan Ahmad / [@born-2learn](https://github.com/born-2learn)
 
 In the past **26 hours** we've built a game to teach you about Clifford gates and universal gate sets along with magic states and their distillation. Our hope is that we'll teach you intuitively with a simple game to fill in the surface area of a sphere.
 
@@ -70,7 +70,7 @@ Here are some individual impressions of the hackathon:
 > "First time in game creation and first time using IonQ hardware, enjoyed seeing magic state distillation visualized"
 * Mostafa Atallah
 > "First time I use azure quantum and IonQ devices all the time I only use IBMQ experience"
-* Syed Farhan
+* Syed Farhan Ahmad
 > "This was my first experience in game development and design - a game that is educational and fun to play from both industrial and academic perspectives due to its coverage of QEC!"
     
 ### Resources
