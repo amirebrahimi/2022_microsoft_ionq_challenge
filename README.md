@@ -4,9 +4,6 @@
 <br>
 for the IonQ + Microsoft Joint Challenge @ MIT iQuHACK 2022!
 
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  
 <p align="left">
   <a href="https://azure.microsoft.com/en-us/solutions/quantum-computing/" target="_blank"><img src="https://user-images.githubusercontent.com/10100490/151488491-609828a4-cd1f-4076-b5b2-a8d9fc2d0fa4.png" width="30%"/> </a>
   <a href="https://ionq.com/" target="_blank"><img src="https://user-images.githubusercontent.com/10100490/151488159-da95eb05-9277-4abe-b1ba-b49871d563ed.svg" width="20%" style="padding: 1%;padding-left: 5%"/></a>
@@ -38,8 +35,8 @@ While many are working in the field to produce as close to an error-free quantum
 According to the Gottesman-Knill theorem, quantum computers that only make use of Clifford gates can be simulated on classical computers with polynomial overhead (i.e. efficiently). So, if those were the only gates we needed to use, then there would be _no need for an actual quantum computer_. In order to achieve universal quantum computation, a quantum computer must be able to perform operations beyond the Clifford set. The T gate is one such operation, which can complete the set. Here, we're going to discuss one of the ways to achieve universal quantum computation - The Bravyi & Kitaev solution via magic states and magic state distillation. The trick here is to create **magic states** that can be used as a resource to enact T-gate operations. In 2004, Bravyi & Kitaev demonstrate a method for purifying such states, given that they can already be prepared approximately. 
 
 It involves using one of two type of states:  
-* $|H\rangle = cos(\frac{\pi}{8})|0\rangle + sin(\frac{\pi}{8})|1\rangle$
-* $|T\rangle = cos(\beta)|0\rangle + e^{\frac{i\pi}{4}}sin(\beta)|1\rangle$ where $\beta = \frac{1}{2}arccos(\frac{1}{\sqrt{3}})$
+* ![$|H\rangle = cos(\frac{\pi}{8})|0\rangle + sin(\frac{\pi}{8})|1\rangle$](https://latex.codecogs.com/svg.image?%5Cinline%20%7CH%5Crangle%20=%20cos(%5Cfrac%7B%5Cpi%7D%7B8%7D)%7C0%5Crangle%20&plus;%20sin(%5Cfrac%7B%5Cpi%7D%7B8%7D)%7C1%5Crangle)  
+* ![$|T\rangle = cos(\beta)|0\rangle + e^{\frac{i\pi}{4}}sin(\beta)|1\rangle$ where $\beta = \frac{1}{2}arccos(\frac{1}{\sqrt{3}})$](https://latex.codecogs.com/svg.image?%5Cinline%20%7CT%5Crangle%20=%20cos(%5Cbeta)%7C0%5Crangle%20&plus;%20e%5E%7B%5Cfrac%7Bi%5Cpi%7D%7B4%7D%7Dsin(%5Cbeta)%7C1%5Crangle$%20where%20$%5Cbeta%20=%20%5Cfrac%7B1%7D%7B2%7Darccos(%5Cfrac%7B1%7D%7B%5Csqrt%7B3%7D%7D))  
 
 These magic states then get used in conjunction with a logical qubit to perform a non-Clifford gate operation. More information is in the original paper from Bravyi & Kitaev.
 
@@ -50,7 +47,7 @@ As described on Wikipedia, the method of distillation is as follows:
 * **Output**: An almost pure state having a small error probability.
 * **repeat**
     * Apply the decoding operation of the [Five-qubit error-correcting code](https://en.wikipedia.org/wiki/Five-qubit_error_correcting_code) and measure the syndrome.
-    * **If** the measured syndrome is $|0000\rangle$, the distillation attempt is successful.
+    * **If** the measured syndrome is **|0000〉**, the distillation attempt is successful.
     * **else** Get rid of the resulting state and restart the algorithm.
 * **until** The states have been distilled to the desired purity.
 
