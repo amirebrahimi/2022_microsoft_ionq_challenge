@@ -203,7 +203,7 @@ class Game:
                 return self._stop_event.is_set()            
 
             def update_timer(self, timer, countdown):
-                max_time = 60 * 2
+                max_time = 60 * 1
                 time_left = max_time
                 round_time = 5
                 delta = 0.2
@@ -216,7 +216,7 @@ class Game:
                         timer.value = (total - float(i+1))/total
                         time_left -= delta
                         if time_left < 0:
-                            countdown.value = f"Game Over! Final score: {np.sum(self.game.covered)}"
+                            countdown.value = f"Game Over! Final score: {np.sum(self.game.covered)} / {np.prod(self.game.covered.shape)}"
                             timer.value = 0
                             for b in buttons:
                                 b.description = "😎"
