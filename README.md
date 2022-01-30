@@ -60,6 +60,18 @@ Experimentally, we ran this on a real IonQ quantum computer, [collected the resu
 Hackathons are intense. A few of us slept very little. We all learned an incredible amount in a short period of time. Overall, we achieved creating a novel game and introducing concepts to the game player about how universal quantum computation works. And it all started from this lengthy, bullet-proof detailed design document 😎:
 
 ![design document](designdoc.jpg)
+
+Here are some individual impressions of the hackathon:
+* Abhishek Manhas
+> "This hackathon was a great experience, learning from & meeting experienced people with a similar passion."
+* Amir Ebrahimi
+> "Matplotlib is a terrible game engine renderer!"
+* Jamie Gill
+> "First time in game creation and first time using IonQ hardware, enjoyed seeing magic state distillation visualized"
+* Mostafa Atallah
+> "First time I use azure quantum and IonQ devices all the time I only use IBMQ experience"
+* Syed Farhan
+> "This was my first experience in game development and design - a game that is educational and fun to play from both industrial and academic perspectives due to its coverage of QEC!"
     
 ### Resources
 * [Clifford gates](https://en.wikipedia.org/wiki/Clifford_gates)
