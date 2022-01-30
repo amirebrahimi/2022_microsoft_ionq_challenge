@@ -125,7 +125,7 @@ class Game:
                 diff = (_x, _y, _z) - np.array(point)
                 if np.linalg.norm(diff) <= min_norm:
 #                 print(pindex, tindex, (_x, _y, _z), np.linalg.norm(diff), min_norm)
-                    self.covered[pindex, tindex] = 1
+                    self.covered[pindex, tindex] = 1 - self.covered[pindex, tindex]
 
     def draw(self):
         # from https://stackoverflow.com/questions/41105754/heat-map-half-sphere-plot
@@ -203,9 +203,9 @@ class Game:
                 return self._stop_event.is_set()            
 
             def update_timer(self, timer, countdown):
-                max_time = 60 * 4
+                max_time = 60 * 2
                 time_left = max_time
-                round_time = 10
+                round_time = 5
                 delta = 0.2
                 total = int(round_time/delta)
                 while True:
