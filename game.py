@@ -7,6 +7,7 @@ import random
 import ipywidgets as widgets
 import threading
 import time
+import IPython
 
 class Game:    
     def __init__(self):
@@ -19,8 +20,9 @@ class Game:
         self.covered = np.zeros((self.n_phi, self.n_theta))
         self.theta, self.phi = np.mgrid[0:1*np.pi:self.n_theta*1j, 0:2.0*np.pi:self.n_phi*1j]
         self.thread = None
+        self.sfx = None
         self.add_gate('i') # start in |0> state
-
+        
     @staticmethod
     def _statevector_to_cartesian(sv):
         # from https://en.wikipedia.org/wiki/Bloch_sphere#Plotting_pure_two-spinor_states_through_stereographic_projection
@@ -176,16 +178,18 @@ class Game:
 
     def play(self):
         buttons = []
-        
+                
         def update_buttons(buttons):
             for i, b in enumerate(buttons):
                 b.description = self.gates[i]
                 b.disabled = False
                 if b.description == 't':
                     b.icon = 'check'
+                    if self.sfx:
+                        self.sfx.update()
                 else:
                     b.icon = ''
-        
+                
         class TimerThread(threading.Thread):
             # from https://stackoverflow.com/questions/323972/is-there-any-way-to-kill-a-thread
             """Thread class with a stop() method. The thread itself has to check
@@ -216,16 +220,22 @@ class Game:
                         timer.value = (total - float(i+1))/total
                         time_left -= delta
                         if time_left < 0:
-                            countdown.value = f"Game Over! Final score: {np.sum(self.game.covered)} / {np.prod(self.game.covered.shape)}"
+                            countdown.value = f"Game Over! Final score: {int(np.sum(self.game.covered))} / {np.prod(self.game.covered.shape)}"
                             timer.value = 0
                             for b in buttons:
                                 b.description = "😎"
                                 b.icon = ''
                                 b.disabled = True
                             return
+                        
+                        if any([not b.disabled and 't' in b.description for b in buttons]):
+                            magic = "⚡⚡⚡ Magic state distilled! ⚡⚡⚡"
+                        else:
+                            magic = ""
+                        
                         mins = int(time_left / 60)
-                        secs = int(time_left) % 60
-                        countdown.value = 'Game time left: {minute:02}:{second:02}'.format(minute=mins,second=secs)
+                        secs = int(time_left) % 60                        
+                        countdown.value = 'Game time left: {minute:02}:{second:02}\t{magic}'.format(minute=mins,second=secs, magic=magic)
                     self.game.next_round()
                     update_buttons(buttons)                    
         
@@ -234,10 +244,8 @@ class Game:
             btn.description = '?'
             btn.icon = ''
             btn.disabled = True
-            status = [b.disabled for b in buttons]
-            if all(status):
-                self.next_round()
-                update_buttons(buttons)
+            self.next_round()
+            update_buttons(buttons)
             bloch_sphere.update()
 
         # start the game
@@ -252,9 +260,11 @@ class Game:
             )
             button.on_click(change_icon)
             buttons.append(button)
+        update_buttons(buttons)
             
         timer = widgets.FloatProgress(value=0.0, min=0.0, max=1.0)
         countdown = widgets.Label(value="")
+        self.sfx = widgets.interactive(lambda: display(IPython.display.Audio("512471__michael-grinnell__electric-zap.wav", autoplay=True)))
             
         if self.thread is not None:
             self.thread.stop()
@@ -263,4 +273,4 @@ class Game:
         self.thread.start()
     
         bloch_sphere = widgets.interactive(lambda: display(self.draw()))
-        return widgets.VBox([countdown, timer, widgets.HBox(buttons), bloch_sphere])
+        return widgets.VBox([countdown, timer, widgets.HBox(buttons), bloch_sphere, self.sfx])
