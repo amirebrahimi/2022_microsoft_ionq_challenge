@@ -206,7 +206,7 @@ class Game:
             def stopped(self):
                 return self._stop_event.is_set()            
 
-            def update_timer(self, timer, countdown):
+            def update_timer(self, timer, countdown, score):
                 max_time = 60 * 1
                 time_left = max_time
                 round_time = 5
@@ -219,8 +219,10 @@ class Game:
                         time.sleep(delta)
                         timer.value = (total - float(i+1))/total
                         time_left -= delta
+                        current_score = f"{int(np.sum(self.game.covered))} / {np.prod(self.game.covered.shape)}"
                         if time_left < 0:
-                            countdown.value = f"Game Over! Final score: {int(np.sum(self.game.covered))} / {np.prod(self.game.covered.shape)}"
+                            countdown.value = f"Game Over!"
+                            score.value = f"Final Score: {current_score}"
                             timer.value = 0
                             for b in buttons:
                                 b.description = "😎"
@@ -235,7 +237,8 @@ class Game:
                         
                         mins = int(time_left / 60)
                         secs = int(time_left) % 60                        
-                        countdown.value = 'Game time left: {minute:02}:{second:02}\t{magic}'.format(minute=mins,second=secs, magic=magic)
+                        countdown.value = 'Game time left: {minute:02}:{second:02}\t{magic} '.format(minute=mins,second=secs, magic=magic)
+                        score.value = f"Score: {current_score}"                            
                     self.game.next_round()
                     update_buttons(buttons)                    
         
@@ -264,13 +267,14 @@ class Game:
             
         timer = widgets.FloatProgress(value=0.0, min=0.0, max=1.0)
         countdown = widgets.Label(value="")
+        score = widgets.Label(value="")        
         self.sfx = widgets.interactive(lambda: display(IPython.display.Audio("512471__michael-grinnell__electric-zap.wav", autoplay=True)))
             
         if self.thread is not None:
             self.thread.stop()
             self.thread.join()
-        self.thread = TimerThread(game=self, args=(timer,countdown))
+        self.thread = TimerThread(game=self, args=(timer,countdown, score))
         self.thread.start()
     
         bloch_sphere = widgets.interactive(lambda: display(self.draw()))
-        return widgets.VBox([countdown, timer, widgets.HBox(buttons), bloch_sphere, self.sfx])
+        return widgets.VBox([countdown, score, timer, widgets.HBox(buttons), bloch_sphere, self.sfx])

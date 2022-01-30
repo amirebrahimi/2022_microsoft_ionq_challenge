@@ -1,4 +1,6 @@
-# Welcome to IonQ + Microsoft Joint Challenge @ MIT iQuHACK 2022!
+# ⚡⚡⚡ DisTilling Magic: NISQ's Revenge ⚡⚡⚡
+### _Cover the Bloch Sphere before your T1 runs out! Look out for those coveted T gates!_
+for the IonQ + Microsoft Joint Challenge @ MIT iQuHACK 2022!
 
 <p align="left">
   <a href="https://azure.microsoft.com/en-us/solutions/quantum-computing/" target="_blank"><img src="https://user-images.githubusercontent.com/10100490/151488491-609828a4-cd1f-4076-b5b2-a8d9fc2d0fa4.png" width="30%"/> </a>
@@ -7,6 +9,8 @@
   
 </p>
 
+## Team
+[Amir Ebrahimi]() @amirebrahimi
 
 Quantum computing has many exciting applications in chemistry, machine learning, and optimization – but we've only scratched the surface of the possibilities as a civilization, just like classical computing in the 1950s. We hope you all go on to do quantum algorithms research that will revolutionize every aspect of society for the better!
 
