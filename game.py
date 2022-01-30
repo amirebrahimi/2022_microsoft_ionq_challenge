@@ -75,9 +75,15 @@ class Game:
 #         return list(zip(x, y, z))
     
     @staticmethod
-    def _get_magic_state_result():
-        bs = random.getrandbits(5)
-        result = ''.join('{:05b}'.format(bs))
+    def _get_magic_state_result(use_real_data=True):
+        if use_real_data:
+            # this data comes from running a magic state distillation circuit on IonQ hardware
+            probabilities = {'00000': 0.0272216796875, '00001': 0.0286865234375, '00010': 0.025390625, '00011': 0.04638671875, '00100': 0.009521484375, '00101': 0.0272216796875, '00110': 0.0111083984375, '00111': 0.0380859375, '01000': 0.0423583984375, '01001': 0.01513671875, '01010': 0.0386962890625, '01011': 0.01171875, '01100': 0.0220947265625, '01101': 0.010498046875, '01110': 0.029541015625, '01111': 0.02783203125, '10000': 0.032958984375, '10001': 0.1297607421875, '10010': 0.0389404296875, '10011': 0.021240234375, '10100': 0.0130615234375, '10101': 0.04541015625, '10110': 0.0205078125, '10111': 0.0306396484375, '11000': 0.053466796875, '11001': 0.017822265625, '11010': 0.0283203125, '11011': 0.0098876953125, '11100': 0.022705078125, '11101': 0.017333984375, '11110': 0.0477294921875, '11111': 0.0587158203125}
+            
+            result = random.choices(list(probabilities.keys()), weights=probabilities.values())[0]
+        else:
+            bs = random.getrandbits(5)
+            result = ''.join('{:05b}'.format(bs))
         return result
     
     def next_round(self):
@@ -111,30 +117,15 @@ class Game:
                 diff = [_x, _y, _z] - np.array(point)
                 min_norm = min(min_norm, np.linalg.norm(diff))
 
-#         point_theta = np.arccos(point[2])
-#         point_phi = np.arccos(point[0] / np.sin(point_theta))
-#         if np.isnan(point_phi):
-#             point_phi = 0
-#         print(point_phi, point_theta)
         for pindex, j in enumerate(phi[0,:]):
             for tindex, i in enumerate(theta[:,0]):
                 _x = r*np.sin(i)*np.cos(j)
                 _y = r*np.sin(i)*np.sin(j)
                 _z = r*np.cos(i)
                 diff = (_x, _y, _z) - np.array(point)
-#                 print(pindex, tindex, (_x, _y, _z), np.linalg.norm(diff), min_norm)
                 if np.linalg.norm(diff) <= min_norm:
+#                 print(pindex, tindex, (_x, _y, _z), np.linalg.norm(diff), min_norm)
                     self.covered[pindex, tindex] = 1
-#                 next_j = phi[0, min(len(phi[0,:]) - 1, pindex + 1)]
-#                 next_i = theta[min(len(theta[:,0]) - 1, tindex + 1), 0]
-#                 print(j, next_j, i, next_i)
-#                 if (tindex == 0 or tindex == len(theta[:,0]) - 1) \
-#                     and ((point_phi >= j and point_phi <= next_j) \
-#                     or (point_theta >= i and point_theta <= next_i)):
-#                     self.covered[pindex, tindex] = 1
-#                 elif point_phi >= j and point_phi <= next_j \
-#                     and point_theta >= i and point_theta <= next_i:
-#                     self.covered[pindex, tindex] = 1
 
     def draw(self):
         # from https://stackoverflow.com/questions/41105754/heat-map-half-sphere-plot
@@ -167,51 +158,10 @@ class Game:
         # use facecolors argument, provide array of same shape as z
         #  cm.<cmapname>() allows to get rgba color from array.
         #  array must be normalized between 0 and 1
-        ax.plot_surface(
-            x,y,z, rstride=1, cstride=1, facecolors=cm.hot(c/c.max()), alpha=0.6, linewidth=1) 
-
-#         fib_sphere = np.array(Game._fibonacci_sphere(self.n_phi * self.n_theta))
-    
-#         from scipy.spatial import Delaunay, ConvexHull
-# #         hull = ConvexHull(fib_sphere)
-#         tri = Delaunay(fib_sphere, furthest_site=True)
-# #         tri = Delaunay(tri.convex_hull)
-        
-# #         print(fib_sphere[0])
-#         c = np.zeros(len(tri.convex_hull))
-#         faces = tri.points[tri.simplices]
-#         for p in self.points:
-# #             print(p)
-#             diff = tri.points - p
-# #             print(diff)
-#             p_index = np.argmin(np.linalg.norm(diff, axis=1))
-#             tri_point = tri.points[p_index]
-#             index = -1
-# #             index = tri.find_simplex(tri.points[p_index])  
-#             for i, f in enumerate(faces):
-# #                 if i == 0:
-# #                 print(np.min(np.linalg.norm(f - tri_point, axis=1)))
-#                 if np.min(np.linalg.norm(f - tri_point, axis=1)) < 0.1:
-#                     index = i
-#                     break
-# #             print(p_index)           
-#             if index > 0:
-#                 print(index)
-#                 c[index] = 0.5
-# #         c[30] = 0.5
-#         ax.plot_trisurf(fib_sphere[:,0], fib_sphere[:,1], fib_sphere[:,2], triangles=tri.convex_hull, array=c, alpha=0.4, edgecolor='white')
-#         import mpl_toolkits.mplot3d as a3
-#         faces = tri.points[tri.convex_hull]
-#         for f in faces:
-#             face = a3.art3d.Poly3DCollection([f])
-#             face.set_scale(0.5)
-# #             face.set_color(mpl.colors.rgb2hex(sp.rand(3)))
-#             face.set_edgecolor('k')
-#             face.set_alpha(0.5)
-#             ax.add_collection3d(face)
-        
 #         ax.plot_surface(
-#             x,y,z,  rstride=1, cstride=1, facecolors=cm.hot(c), alpha=0.6, linewidth=1) 
+#             x,y,z, rstride=1, cstride=1, facecolors=cm.hot(c/c.max()), alpha=0.6, linewidth=1)         
+        ax.plot_surface(
+            x,y,z,  rstride=1, cstride=1, facecolors=cm.hot(c), alpha=0.6, linewidth=1) 
         ax.view_init(25, 45)
 #         for angle in range(0, 360):
 #             ax.view_init(30, angle)
