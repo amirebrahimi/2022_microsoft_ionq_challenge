@@ -39,6 +39,42 @@ class Game:
         return [x, y, z]
     
     @staticmethod
+    def _fibonacci_sphere(samples=1000):
+        points = []
+        phi = np.pi * (3. - np.sqrt(5.))  # golden angle in radians
+
+        for i in range(samples):
+            y = 1 - (i / float(samples - 1)) * 2  # y goes from 1 to -1
+            radius = np.sqrt(1 - y * y)  # radius at y
+
+            theta = phi * i  # golden angle increment
+
+            x = np.cos(theta) * radius
+            z = np.sin(theta) * radius
+
+            points.append((x, y, z))
+
+        return points
+#     @staticmethod
+#     def _fibonacci_sphere(num_points: int):
+#         ga = (3 - np.sqrt(5)) * np.pi # golden angle                                                                             
+
+#         # Create a list of golden angle increments along tha range of number of points                                           
+#         theta = ga * np.arange(num_points)
+
+#         # Z is a split into a range of -1 to 1 in order to create a unit circle                                                  
+#         z = np.linspace(1/num_points-1, 1-1/num_points, num_points)
+
+#         # a list of the radii at each height step of the unit circle                                                             
+#         radius = np.sqrt(1 - z * z)
+
+#         # Determine where xy fall on the sphere, given the azimuthal and polar angles                                            
+#         y = radius * np.sin(theta)
+#         x = radius * np.cos(theta)
+        
+#         return list(zip(x, y, z))
+    
+    @staticmethod
     def _get_magic_state_result():
         bs = random.getrandbits(5)
         result = ''.join('{:05b}'.format(bs))
@@ -131,10 +167,51 @@ class Game:
         # use facecolors argument, provide array of same shape as z
         #  cm.<cmapname>() allows to get rgba color from array.
         #  array must be normalized between 0 and 1
-#         ax.plot_surface(
-#             x,y,z, rstride=1, cstride=1, facecolors=cm.hot(c/c.max()), alpha=0.6, linewidth=1) 
         ax.plot_surface(
-            x,y,z,  rstride=1, cstride=1, facecolors=cm.hot(c), alpha=0.6, linewidth=1) 
+            x,y,z, rstride=1, cstride=1, facecolors=cm.hot(c/c.max()), alpha=0.6, linewidth=1) 
+
+#         fib_sphere = np.array(Game._fibonacci_sphere(self.n_phi * self.n_theta))
+    
+#         from scipy.spatial import Delaunay, ConvexHull
+# #         hull = ConvexHull(fib_sphere)
+#         tri = Delaunay(fib_sphere, furthest_site=True)
+# #         tri = Delaunay(tri.convex_hull)
+        
+# #         print(fib_sphere[0])
+#         c = np.zeros(len(tri.convex_hull))
+#         faces = tri.points[tri.simplices]
+#         for p in self.points:
+# #             print(p)
+#             diff = tri.points - p
+# #             print(diff)
+#             p_index = np.argmin(np.linalg.norm(diff, axis=1))
+#             tri_point = tri.points[p_index]
+#             index = -1
+# #             index = tri.find_simplex(tri.points[p_index])  
+#             for i, f in enumerate(faces):
+# #                 if i == 0:
+# #                 print(np.min(np.linalg.norm(f - tri_point, axis=1)))
+#                 if np.min(np.linalg.norm(f - tri_point, axis=1)) < 0.1:
+#                     index = i
+#                     break
+# #             print(p_index)           
+#             if index > 0:
+#                 print(index)
+#                 c[index] = 0.5
+# #         c[30] = 0.5
+#         ax.plot_trisurf(fib_sphere[:,0], fib_sphere[:,1], fib_sphere[:,2], triangles=tri.convex_hull, array=c, alpha=0.4, edgecolor='white')
+#         import mpl_toolkits.mplot3d as a3
+#         faces = tri.points[tri.convex_hull]
+#         for f in faces:
+#             face = a3.art3d.Poly3DCollection([f])
+#             face.set_scale(0.5)
+# #             face.set_color(mpl.colors.rgb2hex(sp.rand(3)))
+#             face.set_edgecolor('k')
+#             face.set_alpha(0.5)
+#             ax.add_collection3d(face)
+        
+#         ax.plot_surface(
+#             x,y,z,  rstride=1, cstride=1, facecolors=cm.hot(c), alpha=0.6, linewidth=1) 
         ax.view_init(25, 45)
 #         for angle in range(0, 360):
 #             ax.view_init(30, angle)
@@ -143,7 +220,7 @@ class Game:
         # ax.set_xlim([-2.2,2.2])
         # ax.set_ylim([-2.2,2.2])
         # ax.set_zlim([0,4.4])
-        plt.quiver(*np.zeros(3), *self.points[-1], length=1, color=['g'])
+        plt.quiver(*np.zeros(3), *self.points[-1], length=1, color=['g'], normalize=True)
         plt.close(fig)
         return fig
 
