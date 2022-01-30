@@ -1,5 +1,7 @@
 # ⚡⚡⚡ DisTilling Magic: NISQ's Revenge ⚡⚡⚡
 ### _Cover the Bloch Sphere before your T1 runs out! Look out for those coveted T gates!_
+
+<br>
 for the IonQ + Microsoft Joint Challenge @ MIT iQuHACK 2022!
 
 <p align="left">
@@ -9,72 +11,60 @@ for the IonQ + Microsoft Joint Challenge @ MIT iQuHACK 2022!
   
 </p>
 
+## Play Now!
+* Play on [binder](https://mybinder.org/v2/gh/amirebrahimi/2022_microsoft_ionq_challenge/main?filepath=game.ipynb)
+
+OR
+
+* Clone this repository and run [game.ipynb](game.ipynb)  
+(requires qiskit, jupyterlab / notebooks, ipywidgets, etc.)
+
 ## Team
-[Amir Ebrahimi]() @amirebrahimi
+* Abhishek Manhas / [@AnakinPiwalker](https://github.com/AnakinPiwalker)
+* Amir Ebrahimi / [@amirebrahimi](https://github.com/amirebrahimi)
+* Jamie Gill / [@hegotgame](https://github.com/hegotgame)
+* Mostafa Atallah / [@Mostafa-Atallah2020](https://github.com/Mostafa-Atallah2020)
+* Syed Farhan / [@born-2learn](https://github.com/born-2learn)
 
-Quantum computing has many exciting applications in chemistry, machine learning, and optimization – but we've only scratched the surface of the possibilities as a civilization, just like classical computing in the 1950s. We hope you all go on to do quantum algorithms research that will revolutionize every aspect of society for the better!
+In the past **26 hours** we've built a game to teach you about Clifford gates and universal gate sets along with magic states and their distillation. Our hope is that we'll teach you intuitively with a simple game to fill in the surface area of a sphere.
 
-Today, though, we've got just 26 hours, and we'd like you to use a quantum computer to build a game, or a component of a game.
+The fidelity of qubit operations is many orders of magnitude less reliable than classical bits. There are a couple of reasons for the infidelity such as gates being imperfect, incorrect readout measurements, qubit crosstalk, etc. The canonical algorithms -- Shor's, Grover's, etc. assume that given qubits are error-free (logical qubits). Running them on noisy, physical qubits won't produce a reasonable result. To ensure that we get our desired results i.e. without these errors, we need Quantum Error Correction (QEC).
 
-The possibilities should feel as big as the ones offered by your regular computer! A few ideas to juice your thinking:
-* Use a quantum computer as a random number generator or noise source for
-  - seeding behaviors
-  - procedurally generating maps or music
-* Use quantum logic itself as a gaming mechanism, whether for fun or education
-* Apply Quantum Machine Learning to gameplay
-* [Run Doom... on the universe?](https://www.smbc-comics.com/comic/qc)
+While many are working in the field to produce as close to an error-free quantum computer as possible it is still likely that QEC will be required to enable fault tolerant computation. There are different approaches to QEC, one of which is known as the surface code, which we won't go into detail here about. The surface code encodes a logical qubit using many physical qubits. However, we generally can only produce logical gates from the Clifford group with ease while using the surface code. 
 
-You’ll be able to test your projects on a real ion trap quantum computer provided by IonQ (which [shoots lasers at individual atoms to compute](https://ionq.com/technology)).
-*Remember that current devices are still NISQ, and noise can overtake the computation really fast. We recommend you experiment with circuits that use under a few dozen two-qubit gates.*
+According to the Gottesman-Knill theorem, quantum computers that only make use of Clifford gates can be simulated on classical computers with polynomial overhead (i.e. efficiently). So, if those were the only gates we needed to use, then there would be _no need for an actual quantum computer_. In order to achieve universal quantum computation, a quantum computer must be able to perform operations beyond the Clifford set. The T gate is one such operation, which can complete the set. Here, we're going to discuss one of the ways to achieve universal quantum computation - The Bravyi & Kitaev solution via magic states and magic state distillation. The trick here is to create **magic states** that can be used as a resource to enact T-gate operations. In 2004, Bravyi & Kitaev demonstrate a method for purifying such states, given that they can already be prepared approximately. 
 
-You can develop your project using any language supported by Azure Quantum: Q#, Qiskit, or Cirq.
+It involves using one of two type of states:  
+* $|H\rangle = cos(\frac{\pi}{8})|0\rangle + sin(\frac{\pi}{8})|1\rangle$
+* $|T\rangle = cos(\beta)|0\rangle + e^{\frac{i\pi}{4}}sin(\beta)|1\rangle$ where $\beta = \frac{1}{2}arccos(\frac{1}{\sqrt{3}})$
 
-## Using Azure Quantum
-You should have received an invite to join quantum workspace https://portal.azure.com/52f51314-00bb-49b7-a28d-0b0a4be6d1c9. Join it, and use that workspace’s information to connect to Azure from the environment you’re using to work with the QDK:
-* Subscription ID: b1d7f7f8-743f-458e-b3a0-3e09734d716d
-* Workspace ID: aq-hackathon-01
-* Storage account: aqhackathon01
-* Location: eastus
+These magic states then get used in conjunction with a logical qubit to perform a non-Clifford gate operation. More information is in the original paper from Bravyi & Kitaev.
 
-Don't wait until the last moment to submit your programs! IonQ systems operate on a queue system. If you submit a program, it may take a few hours to complete. If you want to make sure you get your results back by Sunday morning, make sure to submit them by the end of day on Saturday.
+Because we can't rely on our noisy quantum computers to produce these states fault tolerantly it is necessary to _distill_ purer states. Enter: **magic state distillation**. 
 
-## Submitting your projects
-To submit your solutions:
-1. Fork this repository to your GitHub account.
-2. Commit your project to your forked repository.  
-Include any files you consider relevant: the project itself, README including the description of the project and instructions on running the project, screenshots of results, any visualizations you've done, your project presentation, etc.
-3. To submit your project, submit the link to your repository as detailed on https://iquhack.mit.edu/.
-Your repository has to be made public at the time of the Hackathon end for us to be able to judge your solutions. We don't recommend making your work public early during the Hackathon, so as not to tempt other teams to borrow from your work. Let everybody enjoy their exploration!
-*Note that GitHub doesn't allow to change visibility of the forks. You can either fork the repository, keep it public, and push your changes at the last possible moment, or you can duplicate the repository, make it private to work on it during the Hackathon, and make it public at the end of the Hackathon.*
-4. If you want to write a blog post about your project, publish it shortly after the Hackathon ends and add a link to it to your GitHub repository.
+As described on Wikipedia, the method of distillation is as follows:
+* **Input**: Prepare 5 imperfect states.
+* **Output**: An almost pure state having a small error probability.
+* **repeat**
+    * Apply the decoding operation of the [Five-qubit error-correcting code](https://en.wikipedia.org/wiki/Five-qubit_error_correcting_code) and measure the syndrome.
+    * **If** the measured syndrome is $|0000\rangle$, the distillation attempt is successful.
+    * **else** Get rid of the resulting state and restart the algorithm.
+* **until** The states have been distilled to the desired purity.
 
-## Judging
+We have implemented this protocol in the following notebook: [qiskit_distillation.ipynb](qiskit_distillation.ipynb)
 
-We'll be evaluating the projects based on several criteria, as detailed in this **rubric:** 
+Experimentally, we ran this on a real IonQ quantum computer, [collected the results](ionq_qpu_real_data.ipynb), and used this real data in our game to control when T gates appear.
 
-https://docs.google.com/document/u/1/d/e/2PACX-1vR5PVoInN_Fi42lIOchhblgGBPblgNyouj1XHukonZ4sdqY-p5ulS9TxdzvddEcDNFc5k_6teFyKzXv/pub
+### Conclusion
 
-## Eligibility and prizes
-The (1) highest team score will receive a **$500 Visa Gift Card** (physical or virtual) for the team. The next (4) highest team scores will receive a **$250 Visa Gift Card** (physical or virtual) for the team. The (5) winning teams will have an opportunity to present their projects to the Microsoft Quantum Team at a later date and time (to be scheduled after the results announcement).
+Hackathons are intense. A few of us slept very little. We all learned an incredible amount in a short period of time. Overall, we achieved creating a novel game and introducing concepts to the game player about how universal quantum computation works. And it all started from this lengthy, bullet-proof detailed design document 😎:
 
-Government officials and Microsoft employees are not eligible to participate in this challenge.
-
-For the general rules on eligibility and hackathon participation, please refer to the [official rules](http://iquhack.mit.edu/).
-
-## Resources
-
-### Microsoft Quantum Development Kit installation
-
-For this Hackathon, you have several options of setting up the QDK:
-
-* local setup: you'll need the [standalone QDK](https://docs.microsoft.com/en-us/azure/quantum/install-command-line-qdk), and possibly (depending on what kind of project you decide to do) integration with [Q# Jupyter Notebooks](https://docs.microsoft.com/en-us/azure/quantum/install-jupyter-qkd) and/or with [Python](https://docs.microsoft.com/en-us/azure/quantum/install-python-qdk).
-* qBraid: you can use qBraid virtual environment to develop your project. Here are the tutorials on how to [use Q# with qBraid](https://www.youtube.com/watch?v=E5JH1YfqSos) and [submit Azure Quantum jobs with qBraid](https://www.youtube.com/watch?v=WLAAqsqlYb8).
-* Azure Portal: you can use the hosted notebooks experience to run code directly from Azure Portal.
-
-### Documentation and tutorials
-
-* [Azure Quantum and QDK documentation](https://docs.microsoft.com/quantum).
-* [The Quantum Katas](https://github.com/Microsoft/QuantumKatas/) - a collection of tutorials and practice problems.
-* Microsoft Learn learing path ["Quantum computing foundations"](https://docs.microsoft.com/learn/paths/quantum-computing-fundamentals/).
-* [Q# developer blog](https://devblogs.microsoft.com/qsharp/).
-* Azure Fridays episode [Quantum programming with Q# and running on hardware with Azure Quantum](https://www.youtube.com/watch?v=c9Df90CVHkc) shows the end-to-end quantum software development process with the QDK tools.
+![design document](designdoc.jpg)
+    
+### Resources
+* [Clifford gates](https://en.wikipedia.org/wiki/Clifford_gates)
+* [Gottesman-Knill theorem](https://en.wikipedia.org/wiki/Gottesman%E2%80%93Knill_theorem)
+* [Magic State Distillation](https://en.wikipedia.org/wiki/Magic_state_distillation)
+* [Quantum Error Correction using Repetition Codes - Part 1 by James R. Wootton](https://qiskit.org/learn/intro-qc-qh)
+* [IQC Magic States by Nathan Babock](https://www.iqst.ca/events/csqic05/talks/nathan%20b.pdf)
+* [Original paper by Bravyi & Kitaev](https://arxiv.org/pdf/quant-ph/0403025.pdf)
