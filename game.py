@@ -1,5 +1,5 @@
-from qiskit import execute, Aer, QuantumCircuit, QuantumRegister, ClassicalRegister
-from qiskit.providers.aer import StatevectorSimulator, QasmSimulator, UnitarySimulator
+from qiskit import execute, QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
+from qiskit.providers.basicaer import StatevectorSimulatorPy as StatevectorSimulator, QasmSimulatorPy as QasmSimulator
 import matplotlib.pyplot as plt
 from matplotlib import cm
 import numpy as np
@@ -101,7 +101,8 @@ class Game:
     def add_gate(self, gate):
         op = getattr(self.state, gate)
         op(0)
-        results = self.backend.run(self.state).result()
+        qc = transpile(self.state, self.backend)
+        results = self.backend.run(qc).result()
         psi = results.get_statevector()
         point = Game._statevector_to_cartesian(psi)
         self.points.append(point)

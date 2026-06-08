@@ -2,7 +2,5 @@ ipykernel
 ipywidgets
 jupyterlab
 matplotlib
-qiskit
-qiskit-aer
-qiskit-terra
+qiskit<1
 scipy
